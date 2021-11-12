@@ -1,3 +1,3 @@
 # Redscript Syntax Highlighting
 
-![preview](preview.png)
+![preview](https://github.com/jackhumbert/redscript-syntax-highlighting/raw/master/preview.png)

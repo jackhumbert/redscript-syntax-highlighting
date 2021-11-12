@@ -1,7 +1,8 @@
 {
     "name": "redscript-syntax-highlighting",
     "displayName": "redscript-syntax-highlighting",
-    "description": "",
+    "description": "Syntax Highlighting for Redscript",
+    "repository": "https://github.com/jackhumbert/redscript-syntax-highlighting",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.62.0"
