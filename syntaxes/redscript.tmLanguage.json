@@ -1,0 +1,3045 @@
+{
+  "information_for_contributors": [
+    "This file has been converted from https://github.com/textmate/redscript.tmbundle/blob/master/Syntaxes/Swift.tmLanguage",
+    "If you want to provide a fix or improvement, please create a pull request against the original repository.",
+    "Once accepted there, we are happy to receive an update request."
+  ],
+  "version": "https://github.com/textmate/swift.tmbundle/commit/8c7672d74c1baa4e6944a05ac6c57a623532f18b",
+  "name": "Redscript",
+  "scopeName": "source.redscript",
+  "comment": "See redscript.tmbundle/grammar-test.redscript for test cases.",
+  "patterns": [
+    {
+      "include": "#root"
+    }
+  ],
+  "repository": {
+    "constructor": {
+      "patterns": [
+        {
+          "name": "meta.constructor.redscript",
+          "begin": "\\bnew\\s",
+          "beginCaptures":{
+            "0": {
+              "name": "keyword.other.declarataion-specifier.redscript"
+            },
+            "1": {
+              "name": "entity.name.class.redscript"
+            }
+          },
+          "end": "(?!\\G)(\\))",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "patterns": [
+            {
+              "name": "meta.constructor.class.redscript",
+              "begin": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))(\\()",
+              "beginCaptures" : {
+                "1": {
+                  "name": "entity.name.class.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.arguments.begin.redscript"
+                }
+              },
+              "end": "(?!\\G)|"
+            }
+          ]
+        }
+      ]
+    },
+    "attributes": {
+      "patterns": [
+        {
+          "name": "meta.attribute.redscript",
+          "begin": "((@)(?:(?:wrap|add|replace)Method|replaceGlobal|addField))(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.attribute.redscript"
+            },
+            "2": {
+              "name": "punctuation.definition.attribute.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.arguments.begin.redscript"
+            }
+          },
+          "end": "(?!\\G)\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "patterns": [
+            {
+              "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+              "name": "entity.name.class.redscript"
+            }
+          ]
+        }
+      ]
+    },
+    "builtin-functions": {
+      "patterns": [
+        {
+          "comment": "Member functions for IScriptable (what all classes inherit from)",
+          "match": "(?<=\\.)(?:DetectScriptableCycles|GetClassName|IsA|IsExactlyA|ToString)(?=\\s*[({])\\b",
+          "name": "support.function.redscript"
+        }
+      ]
+    },
+    "builtin-global-functions": {
+      "patterns": [
+        {
+          "comment": "Global functions available in Redscript",
+          "match": "\\b(Cast|Equals|NotEquals|IsDefined|To(String|Variant)|EnumInt|IntEnum|Array(Size|Resize|Push|Pop|Clear|Find(First|Last)|Contains|Count|Insert|Remove|Grow|Erase|Last))(?=\\s*\\()",
+          "name": "support.function.redscript"
+        }
+      ]
+    },
+    "builtin-properties": {
+      "patterns": [
+        {
+          "comment": "Doesn't exist for all, but common",
+          "match": "(?<=\\.)(?:value)\\b",
+          "name": "support.variable.redscript"
+        }
+      ]
+    },
+    "builtin-types": {
+      "comment": "Types provided in the standard library",
+      "patterns": [
+        {
+          "include": "#builtin-class-type"
+        },
+        {
+          "include": "#builtin-reference-type"
+        },
+        {
+          "match": "\\bAny\\b",
+          "name": "support.type.any.redscript"
+        }
+      ],
+      "repository": {
+        "builtin-class-type": {
+          "comment": "Builtin types",
+          "match": "\\b(IScriptable|Vector(2|3|4)|Void|Bool|String|CName|ResRef|TweakDBID|Int(32|64)|Uint32|Float|Double)\\b",
+          "name": "support.type.redscript"
+        },
+        "builtin-reference-type": {
+          "patterns": [
+            {
+              "comment": "References & weak references in Redscript",
+              "begin": "\\b(w?ref|array)(<)\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.other.reference-specifier.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.arguments.begin.redscript"
+                }
+              },
+              "end": ">",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.arguments.end.redscript"
+                }
+              },
+              "name": "entity.name.class.redscript",
+              "patterns": [
+                {
+                  "include": "#builtin-types"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "code-block": {
+      "begin": "\\{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.scope.begin.redscript"
+        }
+      },
+      "end": "\\}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.scope.end.redscript"
+        }
+      },
+      "patterns": [
+        {
+          "include": "$self"
+        }
+      ]
+    },
+    "comments": {
+      "patterns": [
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.comment.redscript"
+            }
+          },
+          "match": "\\A^(#!).*$\\n?",
+          "name": "comment.line.number-sign.redscript"
+        },
+        {
+          "begin": "/\\*\\*(?!/)",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.redscript"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.redscript"
+            }
+          },
+          "name": "comment.block.documentation.redscript",
+          "patterns": [
+            {
+              "include": "#nested"
+            }
+          ]
+        },
+        {
+          "begin": "/\\*:",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.redscript"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.redscript"
+            }
+          },
+          "name": "comment.block.documentation.playground.redscript",
+          "patterns": [
+            {
+              "include": "#nested"
+            }
+          ]
+        },
+        {
+          "begin": "/\\*",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.begin.redscript"
+            }
+          },
+          "end": "\\*/",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.comment.end.redscript"
+            }
+          },
+          "name": "comment.block.redscript",
+          "patterns": [
+            {
+              "include": "#nested"
+            }
+          ]
+        },
+        {
+          "match": "\\*/",
+          "name": "invalid.illegal.unexpected-end-of-block-comment.redscript"
+        },
+        {
+          "begin": "(^[ \\t]+)?(?=//)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.redscript"
+            }
+          },
+          "end": "(?!\\G)",
+          "patterns": [
+            {
+              "begin": "///",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.redscript"
+                }
+              },
+              "end": "^",
+              "name": "comment.line.triple-slash.documentation.redscript"
+            },
+            {
+              "begin": "//:",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.redscript"
+                }
+              },
+              "end": "^",
+              "name": "comment.line.double-slash.documentation.redscript"
+            },
+            {
+              "begin": "//",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.redscript"
+                }
+              },
+              "end": "^",
+              "name": "comment.line.double-slash.redscript"
+            }
+          ]
+        }
+      ],
+      "repository": {
+        "nested": {
+          "begin": "/\\*",
+          "end": "\\*/",
+          "patterns": [
+            {
+              "include": "#nested"
+            }
+          ]
+        }
+      }
+    },
+    "compiler-control": {
+      "patterns": [
+        {
+          "begin": "^\\s*(#)(if|elseif)\\s+(false)\\b.*?(?=$|//|/\\*)",
+          "beginCaptures": {
+            "0": {
+              "name": "meta.preprocessor.conditional.redscript"
+            },
+            "1": {
+              "name": "punctuation.definition.preprocessor.redscript"
+            },
+            "2": {
+              "name": "keyword.control.preprocessor.conditional.redscript"
+            },
+            "3": {
+              "name": "constant.language.boolean.redscript"
+            }
+          },
+          "contentName": "comment.block.preprocessor.redscript",
+          "end": "(?=^\\s*(#(elseif|else|endif)\\b))"
+        },
+        {
+          "begin": "^\\s*(#)(if|elseif)\\s+",
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.preprocessor.redscript"
+            },
+            "2": {
+              "name": "keyword.control.preprocessor.conditional.redscript"
+            }
+          },
+          "end": "(?=\\s*(?://|/\\*))|$",
+          "name": "meta.preprocessor.conditional.redscript",
+          "patterns": [
+            {
+              "match": "(&&|\\|\\|)",
+              "name": "keyword.operator.logical.redscript"
+            },
+            {
+              "match": "\\b(true|false)\\b",
+              "name": "constant.language.boolean.redscript"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.other.condition.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                },
+                "3": {
+                  "name": "support.constant.platform.architecture.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "match": "\\b(arch)\\s*(\\()\\s*(?:(arm|arm64|powerpc64|powerpc64le|i386|x86_64|s390x)|\\w+)\\s*(\\))"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.other.condition.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                },
+                "3": {
+                  "name": "support.constant.platform.os.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "match": "\\b(os)\\s*(\\()\\s*(?:(macOS|OSX|iOS|tvOS|watchOS|Android|Linux|FreeBSD|Windows|PS4)|\\w+)\\s*(\\))"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.other.condition.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                },
+                "3": {
+                  "name": "entity.name.type.module.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "match": "\\b(canImport)\\s*(\\()([\\p{L}_][\\p{L}_\\p{N}\\p{M}]*)(\\))"
+            },
+            {
+              "begin": "\\b(targetEnvironment)\\s*(\\()",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.other.condition.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                }
+              },
+              "end": "(\\))|$",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "match": "\\b(simulator|UIKitForMac)\\b",
+                  "name": "support.constant.platform.environment.redscript"
+                }
+              ]
+            },
+            {
+              "begin": "\\b(redscript|compiler)\\s*(\\()",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.other.condition.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                }
+              },
+              "end": "(\\))|$",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "match": ">=|<",
+                  "name": "keyword.operator.comparison.redscript"
+                },
+                {
+                  "match": "\\b[0-9]+(?:\\.[0-9]+)*\\b",
+                  "name": "constant.numeric.redscript"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.preprocessor.redscript"
+            },
+            "2": {
+              "name": "keyword.control.preprocessor.conditional.redscript"
+            },
+            "3": {
+              "patterns": [
+                {
+                  "match": "\\S+",
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              ]
+            }
+          },
+          "match": "^\\s*(#)(else|endif)(.*?)(?=$|//|/\\*)",
+          "name": "meta.preprocessor.conditional.redscript"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "punctuation.definition.preprocessor.redscript"
+            },
+            "2": {
+              "name": "keyword.control.preprocessor.sourcelocation.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.parameters.begin.redscript"
+            },
+            "5": {
+              "patterns": [
+                {
+                  "begin": "(file)\\s*(:)\\s*(?=\")",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "support.variable.parameter.redscript"
+                    },
+                    "2": {
+                      "name": "punctuation.separator.key-value.redscript"
+                    }
+                  },
+                  "end": "(?!\\G)",
+                  "patterns": [
+                    {
+                      "include": "#literals"
+                    }
+                  ]
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "support.variable.parameter.redscript"
+                    },
+                    "2": {
+                      "name": "punctuation.separator.key-value.redscript"
+                    },
+                    "3": {
+                      "name": "constant.numeric.integer.redscript"
+                    }
+                  },
+                  "match": "(line)\\s*(:)\\s*([0-9]+)"
+                },
+                {
+                  "match": ",",
+                  "name": "punctuation.separator.parameters.redscript"
+                },
+                {
+                  "match": "\\S+",
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              ]
+            },
+            "6": {
+              "name": "punctuation.definition.parameters.begin.redscript"
+            },
+            "7": {
+              "patterns": [
+                {
+                  "match": "\\S+",
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              ]
+            }
+          },
+          "match": "^\\s*(#)(sourceLocation)((\\()([^)]*)(\\)))(.*?)(?=$|//|/\\*)",
+          "name": "meta.preprocessor.sourcelocation.redscript"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "include": "#function"
+        },
+        {
+          "include": "#function-initializer"
+        },
+        {
+          "include": "#typed-variable-declaration"
+        },
+        {
+          "include": "#import"
+        },
+        {
+          "include": "#operator"
+        },
+        {
+          "include": "#precedencegroup"
+        },
+        {
+          "include": "#protocol"
+        },
+        {
+          "include": "#type"
+        },
+        {
+          "include": "#extension"
+        },
+        {
+          "include": "#typealias"
+        }
+      ],
+      "repository": {
+        "available-types": {
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#builtin-types"
+            },
+            {
+              "include": "#attributes"
+            },
+            {
+              "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+              "name": "entity.name.class.redscript"
+            },
+            {
+              "match": "\\binout\\b",
+              "name": "storage.modifier.redscript"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.operator.type.function.redscript"
+                }
+              },
+              "match": "(?<![/=\\-+!*%<>&|\\^~.])(->)(?![/=\\-+!*%<>&|\\^~.])"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.operator.type.composition.redscript"
+                }
+              },
+              "comment": "Redscript 3: A & B",
+              "match": "(?<![/=\\-+!*%<>&|\\^~.])(&)(?![/=\\-+!*%<>&|\\^~.])"
+            },
+            {
+              "match": "[?!]",
+              "name": "keyword.operator.type.optional.redscript"
+            },
+            {
+              "match": "\\.\\.\\.",
+              "name": "keyword.operator.function.variadic-parameter.redscript"
+            },
+            {
+              "include": "#tuple-type"
+            },
+            {
+              "include": "#collection-type"
+            },
+            {
+              "include": "#generic-argument-clause"
+            }
+          ],
+          "repository": {
+            "collection-type": {
+              "begin": "\\[",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.section.collection-type.begin.redscript"
+                }
+              },
+              "comment": "array and dictionary types [Value] and [Key: Value]",
+              "end": "\\]|(?=[>){}])",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.section.collection-type.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#available-types"
+                },
+                {
+                  "begin": ":",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "punctuation.separator.key-value.redscript"
+                    }
+                  },
+                  "end": "(?=\\]|[>){}])",
+                  "patterns": [
+                    {
+                      "match": ":",
+                      "name": "invalid.illegal.extra-colon-in-dictionary-type.redscript"
+                    },
+                    {
+                      "include": "#available-types"
+                    }
+                  ]
+                }
+              ]
+            },
+            "tuple-type": {
+              "begin": "\\(",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.section.tuple-type.begin.redscript"
+                }
+              },
+              "end": "\\)|(?=[>\\]{}])",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.section.tuple-type.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#available-types"
+                }
+              ]
+            }
+          }
+        },
+        "extension": {
+          "begin": "\\b(extension)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.$1.redscript"
+            },
+            "2": {
+              "name": "entity.name.type.redscript",
+              "patterns": [
+                {
+                  "include": "#available-types"
+                }
+              ]
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?<=\\})",
+          "name": "meta.definition.type.$1.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "comment": "SE-0143: Conditional Conformances",
+              "include": "#generic-where-clause"
+            },
+            {
+              "include": "#inheritance-clause"
+            },
+            {
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.begin.redscript"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.end.redscript"
+                }
+              },
+              "name": "meta.definition.type.body.redscript",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ]
+        },
+        "function": {
+          "begin": "(?x)\n\t\t\t\t\t\t\\b\n\t\t\t\t\t\t(func)\n\t\t\t\t\t\t\\s+\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t(?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>)\n\t\t\t\t\t\t  | (?:\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?<oph>\t\t\t\t\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\\g<oph>\n\t\t\t\t\t\t\t\t\t  | (?<opc>\t\t\t\t\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t\t\t[\\x{0300}-\\x{036F}]\n\t\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t)*\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t  | ( \\. ( \\g<oph> | \\g<opc> | \\. )+ )\t\t\t# Dot operators\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t\t\\s*\n\t\t\t\t\t\t(?=\\(|<)\n\t\t\t\t\t",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.function.redscript"
+            },
+            "2": {
+              "name": "entity.name.function.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?<=\\})|$(?# functions in protocol declarations or generated interfaces have no body)",
+          "name": "meta.definition.function.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#generic-parameter-clause"
+            },
+            {
+              "include": "#parameter-clause"
+            },
+            {
+              "include": "#function-result"
+            },
+            {
+              "comment": "Redscript 3: generic constraints after the parameters and return type",
+              "include": "#generic-where-clause"
+            },
+            {
+              "begin": "(\\{)",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.section.function.begin.redscript"
+                }
+              },
+              "end": "(\\})",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.section.function.end.redscript"
+                }
+              },
+              "name": "meta.definition.function.body.redscript",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ]
+        },
+        "function-initializer": {
+          "begin": "(?<!\\.)\\b(init[?!]*(?# only one is valid, but we want the in⇥ snippet to produce something that looks good))\\s*(?=\\(|<)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.function.redscript",
+              "patterns": [
+                {
+                  "match": "(?<=[?!])[?!]+",
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              ]
+            }
+          },
+          "end": "(?<=\\})|$",
+          "name": "meta.definition.function.initializer.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#generic-parameter-clause"
+            },
+            {
+              "include": "#parameter-clause"
+            },
+            {
+              "comment": "Redscript 3: generic constraints after the parameters and return type",
+              "include": "#generic-where-clause"
+            },
+            {
+              "begin": "(\\{)",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.section.function.begin.redscript"
+                }
+              },
+              "end": "(\\})",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.section.function.end.redscript"
+                }
+              },
+              "name": "meta.definition.function.body.redscript",
+              "patterns": [
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ]
+        },
+        "function-result": {
+          "begin": "(?<![/=\\-+!*%<>&|\\^~.])(->)(?![/=\\-+!*%<>&|\\^~.])\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.operator.function-result.redscript"
+            }
+          },
+          "end": "(?!\\G)(?=\\{|;)|$",
+          "name": "meta.function-result.redscript",
+          "patterns": [
+            {
+              "include": "#available-types"
+            }
+          ]
+        },
+        "generic-argument-clause": {
+          "begin": "<",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.separator.generic-argument-clause.begin.redscript"
+            }
+          },
+          "end": ">|(?=[)\\]{}])",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.separator.generic-argument-clause.end.redscript"
+            }
+          },
+          "name": "meta.generic-argument-clause.redscript",
+          "patterns": [
+            {
+              "include": "#available-types"
+            }
+          ]
+        },
+        "generic-parameter-clause": {
+          "begin": "<",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.separator.generic-parameter-clause.begin.redscript"
+            }
+          },
+          "end": ">|(?=[^\\w\\d:<>\\s,=&`])(?# characters besides these are never valid in a generic param list -- even if it's not really a valid clause, we should stop trying to parse it if we see one of them.)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.separator.generic-parameter-clause.end.redscript"
+            }
+          },
+          "name": "meta.generic-parameter-clause.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "comment": "Redscript 2: constraints inside the generic param list",
+              "include": "#generic-where-clause"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "variable.language.generic-parameter.redscript"
+                }
+              },
+              "match": "\\b((?!\\d)\\w[\\w\\d]*)\\b"
+            },
+            {
+              "match": ",",
+              "name": "punctuation.separator.generic-parameters.redscript"
+            },
+            {
+              "begin": "(:)\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.separator.generic-parameter-constraint.redscript"
+                }
+              },
+              "end": "(?=[,>]|(?!\\G)\\bwhere\\b)",
+              "name": "meta.generic-parameter-constraint.redscript",
+              "patterns": [
+                {
+                  "begin": "\\G",
+                  "end": "(?=[,>]|(?!\\G)\\bwhere\\b)",
+                  "name": "entity.other.inherited-class.redscript",
+                  "patterns": [
+                    {
+                      "include": "#type-identifier"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "generic-where-clause": {
+          "begin": "\\b(where)\\b\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.generic-constraint-introducer.redscript"
+            }
+          },
+          "end": "(?!\\G)$|(?=[>{};\\n]|//|/\\*)",
+          "name": "meta.generic-where-clause.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#requirement-list"
+            }
+          ],
+          "repository": {
+            "requirement-list": {
+              "begin": "\\G|,\\s*",
+              "end": "(?=[,>{};\\n]|//|/\\*)",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#constraint"
+                },
+                {
+                  "include": "#available-types"
+                },
+                {
+                  "begin": "(?<![/=\\-+!*%<>&|\\^~.])(==)(?![/=\\-+!*%<>&|\\^~.])",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "keyword.operator.generic-constraint.same-type.redscript"
+                    }
+                  },
+                  "end": "(?=\\s*[,>{};\\n]|//|/\\*)",
+                  "name": "meta.generic-where-clause.same-type-requirement.redscript",
+                  "patterns": [
+                    {
+                      "include": "#available-types"
+                    }
+                  ]
+                },
+                {
+                  "begin": "(?<![/=\\-+!*%<>&|\\^~.])(:)(?![/=\\-+!*%<>&|\\^~.])",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "keyword.operator.generic-constraint.conforms-to.redscript"
+                    }
+                  },
+                  "end": "(?=\\s*[,>{};\\n]|//|/\\*)",
+                  "name": "meta.generic-where-clause.conformance-requirement.redscript",
+                  "patterns": [
+                    {
+                      "begin": "\\G\\s*",
+                      "contentName": "entity.other.inherited-class.redscript",
+                      "end": "(?=\\s*[,>{};\\n]|//|/\\*)",
+                      "patterns": [
+                        {
+                          "include": "#available-types"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "import": {
+          "begin": "(?<!\\.)\\b(import)\\s+",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.import.redscript"
+            }
+          },
+          "end": "(;)|$\\n?|(?=//|/\\*)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.terminator.statement.redscript"
+            }
+          },
+          "name": "meta.import.redscript",
+          "patterns": [
+            {
+              "begin": "\\G(?!;|$|//|/\\*)(?:(typealias|struct|class|actor|enum|protocol|var|func)\\s+)?",
+              "beginCaptures": {
+                "1": {
+                  "name": "storage.modifier.redscript"
+                }
+              },
+              "end": "(?=;|$|//|/\\*)",
+              "patterns": [
+                {
+                  "captures": {
+                    "1": {
+                      "name": "punctuation.definition.identifier.redscript"
+                    },
+                    "2": {
+                      "name": "punctuation.definition.identifier.redscript"
+                    }
+                  },
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\t\t(?<=\\G|\\.)\n\t\t\t\t\t\t\t\t\t\t(?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>)\n\t\t\t\t\t\t\t\t\t",
+                  "name": "entity.name.type.redscript"
+                },
+                {
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\t\t(?<=\\G|\\.)\n\t\t\t\t\t\t\t\t\t\t\\$[0-9]+\n\t\t\t\t\t\t\t\t\t",
+                  "name": "entity.name.type.redscript"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "patterns": [
+                        {
+                          "match": "\\.",
+                          "name": "invalid.illegal.dot-not-allowed-here.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\t\t(?<=\\G|\\.)\n\t\t\t\t\t\t\t\t\t\t(?:\n\t\t\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\t\t(?<oph>\t\t\t\t\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\t\t\t\\g<oph>\n\t\t\t\t\t\t\t\t\t\t\t\t  | (?<opc>\t\t\t\t\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t[\\x{0300}-\\x{036F}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t\t\t)*\n\t\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t  | ( \\. ( \\g<oph> | \\g<opc> | \\. )+ )\t\t\t# Dot operators\n\t\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\t\t(?=\\.|;|$|//|/\\*|\\s)\n\t\t\t\t\t\t\t\t\t",
+                  "name": "entity.name.type.redscript"
+                },
+                {
+                  "match": "\\.",
+                  "name": "punctuation.separator.import.redscript"
+                },
+                {
+                  "begin": "(?!\\s*(;|$|//|/\\*))",
+                  "end": "(?=\\s*(;|$|//|/\\*))",
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              ]
+            }
+          ]
+        },
+        "inheritance-clause": {
+          "begin": "(extends)(?=\\s*\\{)|(extends)\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "invalid.illegal.empty-inheritance-clause.redscript"
+            },
+            "2": {
+              "name": "punctuation.separator.inheritance-clause.redscript"
+            }
+          },
+          "end": "(?!\\G)$|(?=[={}])",
+          "name": "meta.inheritance-clause.redscript",
+          "patterns": [
+            {
+              "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+              "name": "entity.name.class.redscript"
+            }
+          ],
+          "repository": {
+            "inherited-type": {
+              "begin": "(?=[`\\p{L}_])",
+              "end": "(?!\\G)",
+              "name": "entity.other.inherited-class.redscript",
+              "patterns": [
+                {
+                  "include": "#type-identifier"
+                }
+              ]
+            },
+            "more-types": {
+              "begin": ",\\s*",
+              "end": "(?!\\G)(?!//|/\\*)|(?=[,={}])",
+              "name": "meta.inheritance-list.more-types",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#inherited-type"
+                },
+                {
+                  "include": "#more-types"
+                }
+              ]
+            }
+          }
+        },
+        "operator": {
+          "begin": "(?x)\n\t\t\t\t\t\t(?:\n\t\t\t\t\t\t\t\\b(prefix|infix|postfix)\n\t\t\t\t\t\t\t\\s+\n\t\t\t\t\t\t)?\n\t\t\t\t\t\t\\b\n\t\t\t\t\t\t(operator)\n\t\t\t\t\t\t\\s+\n\t\t\t\t\t\t(\n\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t(?<oph>\t\t\t\t\t\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\n\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\\g<oph>\n\t\t\t\t\t\t\t\t  | \\.\t\t\t\t\t\t\t\t\t# Invalid dot\n\t\t\t\t\t\t\t\t  | (?<opc>\t\t\t\t\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t\t[\\x{0300}-\\x{036F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)*+\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t  | ( \\. ( \\g<oph> | \\g<opc> | \\. )++ )\t\t\t# Dot operators\n\t\t\t\t\t\t)\n\t\t\t\t\t\t\\s*\n\t\t\t\t\t",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.modifier.redscript"
+            },
+            "2": {
+              "name": "storage.type.function.operator.redscript"
+            },
+            "3": {
+              "name": "entity.name.function.operator.redscript"
+            },
+            "4": {
+              "patterns": [
+                {
+                  "match": "\\.",
+                  "name": "invalid.illegal.dot-not-allowed-here.redscript"
+                }
+              ]
+            }
+          },
+          "end": "(;)|$\\n?|(?=//|/\\*)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.terminator.statement.redscript"
+            }
+          },
+          "name": "meta.definition.operator.redscript",
+          "patterns": [
+            {
+              "include": "#redscript2"
+            },
+            {
+              "include": "#redscript3"
+            },
+            {
+              "match": "((?!$|;|//|/\\*)\\S)+",
+              "name": "invalid.illegal.character-not-allowed-here.redscript"
+            }
+          ],
+          "repository": {
+            "redscript2": {
+              "begin": "\\G(\\{)",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.definition.operator.begin.redscript"
+                }
+              },
+              "end": "(\\})",
+              "endCaptures": {
+                "1": {
+                  "name": "punctuation.definition.operator.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    },
+                    "2": {
+                      "name": "keyword.other.operator.associativity.redscript"
+                    }
+                  },
+                  "match": "\\b(associativity)\\s+(left|right)\\b"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    },
+                    "2": {
+                      "name": "constant.numeric.integer.redscript"
+                    }
+                  },
+                  "match": "\\b(precedence)\\s+([0-9]+)\\b"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    }
+                  },
+                  "match": "\\b(assignment)\\b"
+                }
+              ]
+            },
+            "redscript3": {
+              "captures": {
+                "2": {
+                  "name": "entity.other.inherited-class.redscript",
+                  "patterns": [
+                    {
+                      "include": "#types-precedencegroup"
+                    }
+                  ]
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "match": "\\G(:)\\s*((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))"
+            }
+          }
+        },
+        "parameter-clause": {
+          "begin": "(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.parameters.begin.redscript"
+            }
+          },
+          "end": "(\\))(?:\\s*(async)\\b)?",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.definition.parameters.end.redscript"
+            },
+            "2": {
+              "name": "keyword.control.async.redscript"
+            }
+          },
+          "name": "meta.parameter-clause.redscript",
+          "patterns": [
+            {
+              "include": "#parameter-list"
+            }
+          ]
+        },
+        "parameter-list": {
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "variable.parameter.function.redscript"
+                },
+                "5": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "6": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "comment": "External parameter labels are considered part of the function name",
+              "match": "((?<q1>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q1>))\\s+((?<q2>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q2>))(?=\\s*:)"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "variable.parameter.function.redscript"
+                },
+                "2": {
+                  "name": ""
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "comment": "If no external label is given, the name is both the external label and the internal variable name",
+              "match": "(((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>)))(?=\\s*:)"
+            },
+            {
+              "begin": ":\\s*(?!\\s)",
+              "end": "(?=[,)])",
+              "patterns": [
+                {
+                  "include": "#available-types"
+                },
+                {
+                  "match": ":",
+                  "name": "invalid.illegal.extra-colon-in-parameter-list.redscript"
+                },
+                {
+                  "begin": "=",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "keyword.operator.assignment.redscript"
+                    }
+                  },
+                  "comment": "a parameter's default value",
+                  "end": "(?=[,)])",
+                  "patterns": [
+                    {
+                      "include": "#expressions"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "precedencegroup": {
+          "begin": "\\b(precedencegroup)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*(?=\\{)",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.precedencegroup.redscript"
+            },
+            "2": {
+              "name": "entity.name.type.precedencegroup.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?!\\G)",
+          "name": "meta.definition.precedencegroup.redscript",
+          "patterns": [
+            {
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.precedencegroup.begin.redscript"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.precedencegroup.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    },
+                    "2": {
+                      "name": "entity.other.inherited-class.redscript",
+                      "patterns": [
+                        {
+                          "include": "#types-precedencegroup"
+                        }
+                      ]
+                    },
+                    "3": {
+                      "name": "punctuation.definition.identifier.redscript"
+                    },
+                    "4": {
+                      "name": "punctuation.definition.identifier.redscript"
+                    }
+                  },
+                  "match": "\\b(higherThan|lowerThan)\\s*:\\s*((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    },
+                    "2": {
+                      "name": "keyword.other.operator.associativity.redscript"
+                    }
+                  },
+                  "match": "\\b(associativity)\\b(?:\\s*:\\s*(right|left|none)\\b)?"
+                },
+                {
+                  "captures": {
+                    "1": {
+                      "name": "storage.modifier.redscript"
+                    },
+                    "2": {
+                      "name": "constant.language.boolean.redscript"
+                    }
+                  },
+                  "match": "\\b(assignment)\\b(?:\\s*:\\s*(true|false)\\b)?"
+                }
+              ]
+            }
+          ]
+        },
+        "protocol": {
+          "begin": "\\b(protocol)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.$1.redscript"
+            },
+            "2": {
+              "name": "entity.name.type.$1.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?<=\\})",
+          "name": "meta.definition.type.protocol.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#inheritance-clause"
+            },
+            {
+              "comment": "SE-0142: Permit where clauses to constrain associated types",
+              "include": "#generic-where-clause"
+            },
+            {
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.begin.redscript"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.end.redscript"
+                }
+              },
+              "name": "meta.definition.type.body.redscript",
+              "patterns": [
+                {
+                  "include": "#protocol-method"
+                },
+                {
+                  "include": "#protocol-initializer"
+                },
+                {
+                  "include": "#associated-type"
+                },
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ],
+          "repository": {
+            "associated-type": {
+              "begin": "\\b(associatedtype)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.other.declaration-specifier.redscript"
+                },
+                "2": {
+                  "name": "variable.language.associatedtype.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "end": "(?!\\G)$|(?=[;}]|$)",
+              "name": "meta.definition.associatedtype.redscript",
+              "patterns": [
+                {
+                  "include": "#inheritance-clause"
+                },
+                {
+                  "comment": "SE-0142: Permit where clauses to constrain associated types",
+                  "include": "#generic-where-clause"
+                },
+                {
+                  "include": "#typealias-assignment"
+                }
+              ]
+            },
+            "protocol-initializer": {
+              "begin": "(?<!\\.)\\b(init[?!]*(?# only one is valid, but we want the in⇥ snippet to produce something that looks good))\\s*(?=\\(|<)",
+              "beginCaptures": {
+                "1": {
+                  "name": "storage.type.function.redscript",
+                  "patterns": [
+                    {
+                      "match": "(?<=[?!])[?!]+",
+                      "name": "invalid.illegal.character-not-allowed-here.redscript"
+                    }
+                  ]
+                }
+              },
+              "end": "$|(?=;|//|/\\*|\\})",
+              "name": "meta.definition.function.initializer.redscript",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#generic-parameter-clause"
+                },
+                {
+                  "include": "#parameter-clause"
+                },
+                {
+                  "comment": "Redscript 3: generic constraints after the parameters and return type",
+                  "include": "#generic-where-clause"
+                },
+                {
+                  "begin": "\\{",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "punctuation.section.function.begin.redscript"
+                    }
+                  },
+                  "end": "\\}",
+                  "endCaptures": {
+                    "0": {
+                      "name": "punctuation.section.function.end.redscript"
+                    }
+                  },
+                  "name": "invalid.illegal.function-body-not-allowed-in-protocol.redscript",
+                  "patterns": [
+                    {
+                      "include": "$self"
+                    }
+                  ]
+                }
+              ]
+            },
+            "protocol-method": {
+              "begin": "(?x)\n\t\t\t\t\t\t\t\t\\b\n\t\t\t\t\t\t\t\t(func)\n\t\t\t\t\t\t\t\t\\s+\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>)\n\t\t  \t\t\t\t\t\t  | (?:\n\t\t  \t\t\t\t\t\t\t\t(\n\t\t  \t\t\t\t\t\t\t\t\t(?<oph>\t\t\t\t\t\t\t\t# operator-head\n\t\t  \t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t  \t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t  \t\t\t\t\t\t\t\t\t)\n\t\t  \t\t\t\t\t\t\t\t\t(\n\t\t  \t\t\t\t\t\t\t\t\t\t\\g<oph>\n\t\t  \t\t\t\t\t\t\t\t\t  | (?<opc>\t\t\t\t\t\t\t\t# operator-character\n\t\t  \t\t\t\t\t\t\t\t\t\t\t[\\x{0300}-\\x{036F}]\n\t\t  \t\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t  \t\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t  \t\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t  \t\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t  \t\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t  \t\t\t\t\t\t\t\t\t\t)\n\t\t  \t\t\t\t\t\t\t\t\t)*\n\t\t  \t\t\t\t\t\t\t\t)\n\t\t  \t\t\t\t\t\t\t  | ( \\. ( \\g<oph> | \\g<opc> | \\. )+ )\t\t\t# Dot operators\n\t\t  \t\t\t\t\t\t\t)\n\t\t  \t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t\\s*\n\t\t\t\t\t\t\t\t(?=\\(|<)\n\t\t\t\t\t\t\t",
+              "beginCaptures": {
+                "1": {
+                  "name": "storage.type.function.redscript"
+                },
+                "2": {
+                  "name": "entity.name.function.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "end": "$|(?=;|//|/\\*|\\})",
+              "name": "meta.definition.function.redscript",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#generic-parameter-clause"
+                },
+                {
+                  "include": "#parameter-clause"
+                },
+                {
+                  "include": "#function-result"
+                },
+                {
+                  "comment": "Redscript 3: generic constraints after the parameters and return type",
+                  "include": "#generic-where-clause"
+                },
+                {
+                  "begin": "\\{",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "punctuation.section.function.begin.redscript"
+                    }
+                  },
+                  "end": "\\}",
+                  "endCaptures": {
+                    "0": {
+                      "name": "punctuation.section.function.end.redscript"
+                    }
+                  },
+                  "name": "invalid.illegal.function-body-not-allowed-in-protocol.redscript",
+                  "patterns": [
+                    {
+                      "include": "$self"
+                    }
+                  ]
+                }
+              ]
+            }
+          }
+        },
+        "type": {
+          "patterns": [
+            {
+              "begin": "\\b(class(?!\\s+(?:func|let)\\b)|struct|actor)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+              "beginCaptures": {
+                "1": {
+                  "name": "storage.type.$1.redscript"
+                },
+                "2": {
+                  "name": "entity.name.$1.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "end": "(?<=\\})",
+              "name": "meta.definition.type.$1.redscript",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#generic-parameter-clause"
+                },
+                {
+                  "comment": "Redscript 3: generic constraints after the generic param list",
+                  "include": "#generic-where-clause"
+                },
+                {
+                  "include": "#inheritance-clause"
+                },
+                {
+                  "begin": "\\{",
+                  "beginCaptures": {
+                    "0": {
+                      "name": "punctuation.definition.type.begin.redscript"
+                    }
+                  },
+                  "end": "\\}",
+                  "endCaptures": {
+                    "0": {
+                      "name": "punctuation.definition.type.end.redscript"
+                    }
+                  },
+                  "name": "meta.definition.type.body.redscript",
+                  "patterns": [
+                    {
+                      "include": "$self"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "include": "#type-enum"
+            }
+          ]
+        },
+        "type-enum": {
+          "begin": "\\b(enum)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+          "beginCaptures": {
+            "1": {
+              "name": "storage.type.$1.redscript"
+            },
+            "2": {
+              "name": "entity.name.type.$1.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?<=\\})",
+          "name": "meta.definition.type.$1.redscript",
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "include": "#generic-parameter-clause"
+            },
+            {
+              "comment": "Redscript 3: generic constraints after the generic param list",
+              "include": "#generic-where-clause"
+            },
+            {
+              "include": "#inheritance-clause"
+            },
+            {
+              "begin": "\\{",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.begin.redscript"
+                }
+              },
+              "end": "\\}",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.type.end.redscript"
+                }
+              },
+              "name": "meta.definition.type.body.redscript",
+              "patterns": [
+                {
+                  "include": "#enum-case-clause"
+                },
+                {
+                  "include": "$self"
+                }
+              ]
+            }
+          ],
+          "repository": {
+            "associated-values": {
+              "begin": "\\G\\(",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.parameters.begin.redscript"
+                }
+              },
+              "end": "\\)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.parameters.end.redscript"
+                }
+              },
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "begin": "(?x)\n\t\t\t\t\t\t\t\t\t\t(?:(_)|((?<q1>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*\\k<q1>))\n\t\t\t\t\t\t\t\t\t\t\\s+\n\t\t\t\t\t\t\t\t\t\t(((?<q2>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*\\k<q2>))\n\t\t\t\t\t\t\t\t\t\t\\s*(:)",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "entity.name.function.redscript"
+                    },
+                    "2": {
+                      "name": "invalid.illegal.distinct-labels-not-allowed.redscript"
+                    },
+                    "5": {
+                      "name": "variable.parameter.function.redscript"
+                    },
+                    "7": {
+                      "name": "punctuation.separator.argument-label.redscript"
+                    }
+                  },
+                  "end": "(?=[,)\\]])",
+                  "patterns": [
+                    {
+                      "include": "#available-types"
+                    }
+                  ]
+                },
+                {
+                  "begin": "(((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*\\k<q>))\\s*(:)",
+                  "beginCaptures": {
+                    "1": {
+                      "name": "entity.name.function.redscript"
+                    },
+                    "2": {
+                      "name": "variable.parameter.function.redscript"
+                    },
+                    "4": {
+                      "name": "punctuation.separator.argument-label.redscript"
+                    }
+                  },
+                  "end": "(?=[,)\\]])",
+                  "patterns": [
+                    {
+                      "include": "#available-types"
+                    }
+                  ]
+                },
+                {
+                  "begin": "(?![,)\\]])(?=\\S)",
+                  "comment": "an element without a label (i.e. anything else)",
+                  "end": "(?=[,)\\]])",
+                  "patterns": [
+                    {
+                      "include": "#available-types"
+                    },
+                    {
+                      "match": ":",
+                      "name": "invalid.illegal.extra-colon-in-parameter-list.redscript"
+                    }
+                  ]
+                }
+              ]
+            },
+            "enum-case": {
+              "begin": "(?x)((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "constant.other.redscript"
+                }
+              },
+              "end": "(?<=\\))|(?![=(])",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#associated-values"
+                },
+                {
+                  "include": "#raw-value-assignment"
+                }
+              ]
+            },
+            "enum-case-clause": {
+              "begin": "\\b(case)\\b\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "storage.type.enum.case.redscript"
+                }
+              },
+              "end": "(?=[;}])|(?!\\G)(?!//|/\\*)(?=[^\\s,])",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#enum-case"
+                },
+                {
+                  "include": "#more-cases"
+                }
+              ]
+            },
+            "more-cases": {
+              "begin": ",\\s*",
+              "end": "(?!\\G)(?!//|/\\*)(?=[;}]|[^\\s,])",
+              "name": "meta.enum-case.more-cases",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#enum-case"
+                },
+                {
+                  "include": "#more-cases"
+                }
+              ]
+            },
+            "raw-value-assignment": {
+              "begin": "(=)\\s*",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.operator.assignment.redscript"
+                }
+              },
+              "end": "(?!\\G)",
+              "patterns": [
+                {
+                  "include": "#comments"
+                },
+                {
+                  "include": "#literals"
+                }
+              ]
+            }
+          }
+        },
+        "type-identifier": {
+          "begin": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.name.type.redscript",
+              "patterns": [
+                {
+                  "include": "#builtin-types"
+                }
+              ]
+            },
+            "2": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?!<)",
+          "patterns": [
+            {
+              "begin": "(?=<)",
+              "end": "(?!\\G)",
+              "patterns": [
+                {
+                  "include": "#generic-argument-clause"
+                }
+              ]
+            }
+          ]
+        },
+        "typealias": {
+          "begin": "\\b(typealias)\\s+((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.declaration-specifier.redscript"
+            },
+            "2": {
+              "name": "entity.name.type.typealias.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.identifier.redscript"
+            },
+            "4": {
+              "name": "punctuation.definition.identifier.redscript"
+            }
+          },
+          "end": "(?!\\G)$|(?=;|//|/\\*|$)",
+          "name": "meta.definition.typealias.redscript",
+          "patterns": [
+            {
+              "begin": "\\G(?=<)",
+              "end": "(?!\\G)",
+              "patterns": [
+                {
+                  "include": "#generic-parameter-clause"
+                }
+              ]
+            },
+            {
+              "include": "#typealias-assignment"
+            }
+          ]
+        },
+        "typealias-assignment": {
+          "begin": "(=)\\s*",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.operator.assignment.redscript"
+            }
+          },
+          "end": "(?!\\G)$|(?=;|//|/\\*|$)",
+          "patterns": [
+            {
+              "include": "#available-types"
+            },
+            {
+              "include": "#constructor"
+            }
+          ]
+        },
+        "typed-variable-declaration": {
+          "begin": "(?x)\n\t\t\t\t\t\t\\b(let)\\b\\s+\n\t\t\t\t\t\t(?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>)\\s*\n\t\t\t\t\t\t:\n\t\t\t\t\t",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.other.declaration-specifier.redscript"
+            }
+          },
+          "end": "(?=$|[={])",
+          "patterns": [
+            {
+              "include": "#available-types"
+            }
+          ]
+        },
+        "types-precedencegroup": {
+          "patterns": [
+            {
+              "comment": "Precedence groups in the standard library",
+              "match": "\\b(?:BitwiseShift|Assignment|RangeFormation|Casting|Addition|NilCoalescing|Comparison|LogicalConjunction|LogicalDisjunction|Default|Ternary|Multiplication|FunctionArrow)Precedence\\b",
+              "name": "support.type.redscript"
+            }
+          ]
+        }
+      }
+    },
+    "expressions": {
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#code-block"
+        },
+        {
+          "include": "#attributes"
+        },
+        {
+          "include": "#closure-parameter"
+        },
+        {
+          "include": "#literals"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#builtin-types"
+        },
+        {
+          "include": "#builtin-functions"
+        },
+        {
+          "include": "#builtin-global-functions"
+        },
+        {
+          "include": "#builtin-properties"
+        },
+        {
+          "include": "#compound-name"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#constructor"
+        },
+        {
+          "include": "#function-call-expression"
+        },
+        {
+          "include": "#subscript-expression"
+        },
+        {
+          "include": "#parenthesized-expression"
+        },
+        {
+          "include": "#member-reference"
+        },
+        {
+          "include": "#availability-condition"
+        },
+        {
+          "match": "\\b_\\b",
+          "name": "support.variable.discard-value.redscript"
+        }
+      ],
+      "repository": {
+        "availability-condition": {
+          "begin": "\\B(#(?:un)?available)(\\()",
+          "beginCaptures": {
+            "1": {
+              "name": "support.function.availability-condition.redscript"
+            },
+            "2": {
+              "name": "punctuation.definition.arguments.begin.redscript"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.other.platform.os.redscript"
+                },
+                "2": {
+                  "name": "constant.numeric.redscript"
+                }
+              },
+              "match": "\\s*\\b((?:iOS|macOS|OSX|watchOS|tvOS|UIKitForMac)(?:ApplicationExtension)?)\\b(?:\\s+([0-9]+(?:\\.[0-9]+)*\\b))"
+            },
+            {
+              "captures": {
+                "1": {
+                  "name": "keyword.other.platform.all.redscript"
+                },
+                "2": {
+                  "name": "invalid.illegal.character-not-allowed-here.redscript"
+                }
+              },
+              "match": "(\\*)\\s*(.*?)(?=[,)])"
+            },
+            {
+              "match": "[^\\s,)]+",
+              "name": "invalid.illegal.character-not-allowed-here.redscript"
+            }
+          ]
+        },
+        "closure-parameter": {
+          "match": "\\$[0-9]+",
+          "name": "variable.language.closure-parameter.redscript"
+        },
+        "compound-name": {
+          "captures": {
+            "1": {
+              "name": "entity.name.function.compound-name.redscript"
+            },
+            "2": {
+              "name": "punctuation.definition.entity.redscript"
+            },
+            "3": {
+              "name": "punctuation.definition.entity.redscript"
+            },
+            "4": {
+              "patterns": [
+                {
+                  "captures": {
+                    "1": {
+                      "name": "punctuation.definition.entity.redscript"
+                    },
+                    "2": {
+                      "name": "punctuation.definition.entity.redscript"
+                    }
+                  },
+                  "match": "(?<q>`?)(?!_:)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>):",
+                  "name": "entity.name.function.compound-name.redscript"
+                }
+              ]
+            }
+          },
+          "comment": "a reference to a function with disambiguating argument labels, such as foo(_:), foo(bar:), etc.",
+          "match": "(?x)\n\t\t\t\t\t\t((?<q1>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q1>))       \t\t# function name\n\t\t\t\t\t\t\\(\n\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t((?<q2>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q2>)) \t# argument label\n\t\t\t\t\t\t\t\t\t:\t\t\t\t\t\t\t\t\t\t\t\t# colon\n\t\t\t\t\t\t\t\t)+\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\\)\n\t\t\t\t\t"
+        },
+        "expression-element-list": {
+          "patterns": [
+            {
+              "include": "#comments"
+            },
+            {
+              "begin": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*(:)",
+              "beginCaptures": {
+                "1": {
+                  "name": "entity.name.function.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.separator.argument-label.redscript"
+                }
+              },
+              "comment": "an element with a label",
+              "end": "(?=[,)\\]])",
+              "patterns": [
+                {
+                  "include": "#expressions"
+                }
+              ]
+            },
+            {
+              "begin": "(?![,)\\]])(?=\\S)",
+              "comment": "an element without a label (i.e. anything else)",
+              "end": "(?=[,)\\]])",
+              "patterns": [
+                {
+                  "include": "#expressions"
+                }
+              ]
+            }
+          ]
+        },
+        "function-call-expression": {
+          "patterns": [
+            {
+              "begin": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))\\s*(\\()",
+              "beginCaptures": {
+                "1": {
+                  "name": "entity.name.function.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "4": {
+                  "name": "punctuation.definition.arguments.begin.redscript"
+                }
+              },
+              "comment": "foo(args) -- a call whose callee is a highlightable name",
+              "end": "\\)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.arguments.end.redscript"
+                }
+              },
+              "name": "meta.function-call.redscript",
+              "patterns": [
+                {
+                  "include": "#expression-element-list"
+                }
+              ]
+            },
+            {
+              "begin": "(?<=[`\\])}>\\p{L}_\\p{N}\\p{M}])\\s*(\\()",
+              "beginCaptures": {
+                "1": {
+                  "name": "punctuation.definition.arguments.begin.redscript"
+                }
+              },
+              "comment": "[Int](args) -- a call whose callee is a more complicated expression",
+              "end": "\\)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.arguments.end.redscript"
+                }
+              },
+              "name": "meta.function-call.redscript",
+              "patterns": [
+                {
+                  "include": "#expression-element-list"
+                }
+              ]
+            }
+          ]
+        },
+        "member-reference": {
+          "patterns": [
+            {
+              "captures": {
+                "1": {
+                  "name": "variable.other.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.identifier.redscript"
+                },
+                "3": {
+                  "name": "punctuation.definition.identifier.redscript"
+                }
+              },
+              "match": "(?<=\\.)((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))"
+            }
+          ]
+        },
+        "parenthesized-expression": {
+          "begin": "\\(",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.section.tuple.begin.redscript"
+            }
+          },
+          "comment": "correctly matching closure expressions is too hard (depends on trailing \"in\") so we just tack on some basics to the end of parenthesized-expression",
+          "end": "(\\))\\s*((?:\\b(?:async|throws|rethrows)\\s)*)",
+          "endCaptures": {
+            "1": {
+              "name": "punctuation.section.tuple.end.redscript"
+            },
+            "2": {
+              "patterns": [
+                {
+                  "match": "\\brethrows\\b",
+                  "name": "invalid.illegal.rethrows-only-allowed-on-function-declarations.redscript"
+                }
+              ]
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expression-element-list"
+            }
+          ]
+        },
+        "subscript-expression": {
+          "begin": "(?<=[`\\p{L}_\\p{N}\\p{M}])\\s*(\\[)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.definition.arguments.begin.redscript"
+            }
+          },
+          "end": "\\]",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "name": "meta.subscript-expression.redscript",
+          "patterns": [
+            {
+              "include": "#expression-element-list"
+            }
+          ]
+        }
+      }
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "(?<!\\.)\\b(?:if|else|guard|where|switch|case|default|fallthrough)\\b",
+          "name": "keyword.control.branch.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:continue|break|fallthrough|return)\\b",
+          "name": "keyword.control.transfer.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:while|for|in)\\b",
+          "name": "keyword.control.loop.redscript"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.loop.redscript"
+            },
+            "2": {
+              "name": "punctuation.whitespace.trailing.repeat.redscript"
+            }
+          },
+          "comment": "extra scopes for repeat-while snippet",
+          "match": "(?<!\\.)\\b(repeat)\\b(\\s*)"
+        },
+        {
+          "match": "(?<!\\.)\\bdefer\\b",
+          "name": "keyword.control.defer.redscript"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "invalid.illegal.try-must-precede-await.redscript"
+            },
+            "2": {
+              "name": "keyword.control.await.redscript"
+            }
+          },
+          "match": "(?<!\\.)\\b(?:(await\\s+try)|(await)\\b)"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:catch|throws?|rethrows|try)\\b|\\btry[?!]\\B",
+          "name": "keyword.control.exception.redscript"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.control.exception.redscript"
+            },
+            "2": {
+              "name": "punctuation.whitespace.trailing.do.redscript"
+            }
+          },
+          "comment": "extra scopes for do-catch snippet",
+          "match": "(?<!\\.)\\b(do)\\b(\\s*)"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:let)\\b",
+          "name": "keyword.other.declaration-specifier.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\b(class|enum|struct|module)\\b",
+          "name": "storage.type.$1.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:static|cb|final|abstract|native|const)\\b",
+          "name": "storage.modifier.redscript"
+        },
+        {
+          "match": "\\binit[?!]|\\binit\\b|(?<!\\.)\\b(?:func|deinit|subscript|didSet|get|set|willSet)\\b",
+          "name": "storage.type.function.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:fileprivate|private|internal|public|protected|open)\\b",
+          "name": "keyword.other.declaration-specifier.accessibility.redscript"
+        },
+        {
+          "comment": "matches weak, unowned, unowned(safe), unowned(unsafe)",
+          "match": "(?<!\\.)\\bunowned\\((?:safe|unsafe)\\)|(?<!\\.)\\b(?:weak|unowned)\\b",
+          "name": "keyword.other.capture-specifier.redscript"
+        },
+        {
+          "captures": {
+            "1": {
+              "name": "keyword.operator.type.redscript"
+            },
+            "2": {
+              "name": "keyword.operator.type.metatype.redscript"
+            }
+          },
+          "match": "(?<=\\.)(?:(dynamicType|self)|(Protocol|Type))\\b"
+        },
+        {
+          "match": "(?<!\\.)\\b(?:super|self|this|wrappedMethod)\\b",
+          "name": "variable.language.redscript"
+        },
+        {
+          "match": "\\B(?:#file|#filePath|#fileID|#line|#column|#function|#dsohandle)\\b|\\b(?:__FILE__|__LINE__|__COLUMN__|__FUNCTION__|__DSO_HANDLE__)\\b",
+          "name": "support.variable.redscript"
+        },
+        {
+          "match": "(?<!\\.)\\bimport\\b",
+          "name": "keyword.control.import.redscript"
+        }
+      ]
+    },
+    "literals": {
+      "patterns": [
+        {
+          "include": "#boolean"
+        },
+        {
+          "include": "#numeric"
+        },
+        {
+          "include": "#string"
+        },
+        {
+          "match": "\\bnull\\b",
+          "name": "constant.language.nil.redscript"
+        },
+        {
+          "match": "\\B#keyPath\\b",
+          "name": "support.function.key-path.redscript"
+        },
+        {
+          "begin": "\\B(#selector)(\\()(?:\\s*(getter|setter)\\s*(:))?",
+          "beginCaptures": {
+            "1": {
+              "name": "support.function.selector-reference.redscript"
+            },
+            "2": {
+              "name": "punctuation.definition.arguments.begin.redscript"
+            },
+            "3": {
+              "name": "support.variable.parameter.redscript"
+            },
+            "4": {
+              "name": "punctuation.separator.argument-label.redscript"
+            }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "patterns": [
+            {
+              "include": "#expressions"
+            }
+          ]
+        }
+      ],
+      "repository": {
+        "boolean": {
+          "match": "\\b(true|false)\\b",
+          "name": "constant.language.boolean.redscript"
+        },
+        "numeric": {
+          "patterns": [
+            {
+              "comment": "0.1, -4_2.5, 6.022e23, 10E-5",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)[0-9][0-9_]*(?=\\.[0-9]|[eE])(?:\\.[0-9][0-9_]*)?(?:[eE][-+]?[0-9][0-9_]*)?\\b(?!\\.[0-9])",
+              "name": "constant.numeric.float.decimal.redscript"
+            },
+            {
+              "comment": "-0x1.ap2_3, 0x31p-4",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)(0x[0-9a-fA-F][0-9a-fA-F_]*)(?:\\.[0-9a-fA-F][0-9a-fA-F_]*)?[pP][-+]?[0-9][0-9_]*\\b(?!\\.[0-9])",
+              "name": "constant.numeric.float.hexadecimal.redscript"
+            },
+            {
+              "comment": "0x1p, 0x1p_2, 0x1.5pa, 0x1.1p+1f, 0x1pz",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)(0x[0-9a-fA-F][0-9a-fA-F_]*)(?:\\.[0-9a-fA-F][0-9a-fA-F_]*)?(?:[pP][-+]?\\w*)\\b(?!\\.[0-9])",
+              "name": "invalid.illegal.numeric.float.invalid-exponent.redscript"
+            },
+            {
+              "comment": "0x1.5w (note that 0x1.f may be a valid expression)",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)(0x[0-9a-fA-F][0-9a-fA-F_]*)\\.[0-9][\\w.]*",
+              "name": "invalid.illegal.numeric.float.missing-exponent.redscript"
+            },
+            {
+              "comment": "-.5, .2f (note that 1.-.5 may be a valid expression)",
+              "match": "(?<=\\s|^)\\-?\\.[0-9][\\w.]*",
+              "name": "invalid.illegal.numeric.float.missing-leading-zero.redscript"
+            },
+            {
+              "comment": "0b_0_1, 0x_1p+3q",
+              "match": "(\\B\\-|\\b)0[box]_[0-9a-fA-F_]*(?:[pPeE][+-]?\\w+)?[\\w.]+",
+              "name": "invalid.illegal.numeric.leading-underscore.redscript"
+            },
+            {
+              "comment": "tuple positional member: not really a numeric literal, but not invalid",
+              "match": "(?<=[\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)[0-9]+\\b"
+            },
+            {
+              "comment": "0b010, 0b1_0",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)0b[01][01_]*\\b(?!\\.[0-9])",
+              "name": "constant.numeric.integer.binary.redscript"
+            },
+            {
+              "comment": "0o1, 0o7_3",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)0o[0-7][0-7_]*\\b(?!\\.[0-9])",
+              "name": "constant.numeric.integer.octal.redscript"
+            },
+            {
+              "comment": "02, 3_456",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)[0-9][0-9_]*\\b(?!\\.[0-9])",
+              "name": "constant.numeric.integer.decimal.redscript"
+            },
+            {
+              "comment": "0x4, 0xF_7",
+              "match": "(\\B\\-|\\b)(?<![\\[\\](){}\\p{L}_\\p{N}\\p{M}]\\.)0x[0-9a-fA-F][0-9a-fA-F_]*\\b(?!\\.[0-9])",
+              "name": "constant.numeric.integer.hexadecimal.redscript"
+            },
+            {
+              "match": "(\\B\\-|\\b)[0-9][\\w.]*",
+              "name": "invalid.illegal.numeric.other.redscript"
+            }
+          ]
+        },
+        "string": {
+          "patterns": [
+            {
+              "begin": "\"\"\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.redscript"
+                }
+              },
+              "comment": "SE-0168: Multi-Line String Literals",
+              "end": "\"\"\"(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.block.redscript",
+              "patterns": [
+                {
+                  "match": "\\G.+(?=\"\"\")|\\G.+",
+                  "name": "invalid.illegal.content-after-opening-delimiter.redscript"
+                },
+                {
+                  "match": "\\\\\\s*\\n",
+                  "name": "constant.character.escape.newline.redscript"
+                },
+                {
+                  "include": "#string-guts"
+                },
+                {
+                  "comment": "Allow \\(\"\"\"...\"\"\") to appear inside a block string",
+                  "match": "\\S((?!\\\\\\().)*(?=\"\"\")",
+                  "name": "invalid.illegal.content-before-closing-delimiter.redscript"
+                }
+              ]
+            },
+            {
+              "begin": "#\"\"\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.redscript"
+                }
+              },
+              "end": "\"\"\"#(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.block.raw.redscript",
+              "patterns": [
+                {
+                  "match": "\\G.+(?=\"\"\")|\\G.+",
+                  "name": "invalid.illegal.content-after-opening-delimiter.redscript"
+                },
+                {
+                  "match": "\\\\#\\s*\\n",
+                  "name": "constant.character.escape.newline.redscript"
+                },
+                {
+                  "include": "#raw-string-guts"
+                },
+                {
+                  "comment": "Allow \\(\"\"\"...\"\"\") to appear inside a block string",
+                  "match": "\\S((?!\\\\#\\().)*(?=\"\"\")",
+                  "name": "invalid.illegal.content-before-closing-delimiter.redscript"
+                }
+              ]
+            },
+            {
+              "begin": "(##+)\"\"\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.redscript"
+                }
+              },
+              "end": "\"\"\"\\1(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.block.raw.redscript",
+              "patterns": [
+                {
+                  "match": "\\G.+(?=\"\"\")|\\G.+",
+                  "name": "invalid.illegal.content-after-opening-delimiter.redscript"
+                }
+              ]
+            },
+            {
+              "begin": "\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.redscript"
+                }
+              },
+              "end": "\"(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.single-line.redscript",
+              "patterns": [
+                {
+                  "match": "\\r|\\n",
+                  "name": "invalid.illegal.returns-not-allowed.redscript"
+                },
+                {
+                  "include": "#string-guts"
+                }
+              ]
+            },
+            {
+              "begin": "(n|t|r)(\")",
+              "beginCaptures": {
+                "1": {
+                  "name": "keyword.other.declaration-specifier.redscript"
+                },
+                "2": {
+                  "name": "punctuation.definition.string.begin.redscript"
+                }
+              },
+              "end": "\"(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.single-line.redscript",
+              "patterns": [
+                {
+                  "match": "\\r|\\n",
+                  "name": "invalid.illegal.returns-not-allowed.redscript"
+                },
+                {
+                  "include": "#string-guts"
+                }
+              ]
+            },
+            {
+              "begin": "(##+)\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.raw.redscript"
+                }
+              },
+              "comment": "SE-0168: raw string literals (more than one #, grammar limitations prevent us from supporting escapes)",
+              "end": "\"\\1(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.raw.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.single-line.raw.redscript",
+              "patterns": [
+                {
+                  "match": "\\r|\\n",
+                  "name": "invalid.illegal.returns-not-allowed.redscript"
+                }
+              ]
+            },
+            {
+              "begin": "#\"",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.begin.raw.redscript"
+                }
+              },
+              "comment": "SE-0168: raw string literals (one #, escapes supported)",
+              "end": "\"#(#*)",
+              "endCaptures": {
+                "0": {
+                  "name": "punctuation.definition.string.end.raw.redscript"
+                },
+                "1": {
+                  "name": "invalid.illegal.extra-closing-delimiter.redscript"
+                }
+              },
+              "name": "string.quoted.double.single-line.raw.redscript",
+              "patterns": [
+                {
+                  "match": "\\r|\\n",
+                  "name": "invalid.illegal.returns-not-allowed.redscript"
+                },
+                {
+                  "include": "#raw-string-guts"
+                }
+              ]
+            }
+          ],
+          "repository": {
+            "raw-string-guts": {
+              "comment": "the same as #string-guts but with # in escapes",
+              "patterns": [
+                {
+                  "match": "\\\\#[0\\\\tnr\"']",
+                    "name": "constant.character.escape.redscript"
+                  },
+                  {
+                    "match": "\\\\#u\\{[0-9a-fA-F]{1,8}\\}",
+                    "name": "constant.character.escape.unicode.redscript"
+                  },
+                  {
+                    "begin": "\\\\#\\(",
+                    "beginCaptures": {
+                      "0": {
+                        "name": "punctuation.section.embedded.begin.redscript"
+                      }
+                    },
+                    "contentName": "source.redscript",
+                    "end": "(\\))",
+                    "endCaptures": {
+                      "0": {
+                        "name": "punctuation.section.embedded.end.redscript"
+                      },
+                      "1": {
+                        "name": "source.redscript"
+                      }
+                    },
+                    "name": "meta.embedded.line.redscript",
+                    "patterns": [
+                      {
+                        "include": "$self"
+                      },
+                      {
+                        "begin": "\\(",
+                        "comment": "Nested parens",
+                        "end": "\\)"
+                      }
+                    ]
+                  },
+                  {
+                    "match": "\\\\#.",
+                    "name": "invalid.illegal.escape-not-recognized"
+                  }
+                ]
+              },
+              "string-guts": {
+                "patterns": [
+                  {
+                    "match": "\\\\[0\\\\tnr\"']",
+                      "name": "constant.character.escape.redscript"
+                    },
+                    {
+                      "match": "\\\\u\\{[0-9a-fA-F]{1,8}\\}",
+                      "name": "constant.character.escape.unicode.redscript"
+                    },
+                    {
+                      "begin": "\\\\\\(",
+                      "beginCaptures": {
+                        "0": {
+                          "name": "punctuation.section.embedded.begin.redscript"
+                        }
+                      },
+                      "contentName": "source.redscript",
+                      "end": "(\\))",
+                      "endCaptures": {
+                        "0": {
+                          "name": "punctuation.section.embedded.end.redscript"
+                        },
+                        "1": {
+                          "name": "source.redscript"
+                        }
+                      },
+                      "name": "meta.embedded.line.redscript",
+                      "patterns": [
+                        {
+                          "include": "$self"
+                        },
+                        {
+                          "begin": "\\(",
+                          "comment": "Nested parens",
+                          "end": "\\)"
+                        }
+                      ]
+                    },
+                    {
+                      "match": "\\\\.",
+                      "name": "invalid.illegal.escape-not-recognized"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "operators": {
+          "patterns": [
+            {
+              "patterns": [
+                {
+                  "name": "meta.type-casting",
+                  "comment": "Type casting",
+                  "begin": "\\b(as)\\b\\s+",
+                  "beginCaptures": {
+                    "1": {
+                      "name":"keyword.operator.type-casting.redscript"
+                    }
+                  },
+                  "end": "(?!\\G)",
+                  "patterns": [
+                    {
+                      "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+                      "name": "entity.name.class.redscript"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "begin": "(?x)\n\t\t\t\t\t\t(?=\n\t\t\t\t\t\t\t(?<oph>\t\t\t\t\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\n\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t  | \\.\n\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\\g<oph>\t\t\t\t\t\t\t# operator-head\n\t\t\t\t\t\t\t  | \\.\n\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t)\n\t\t\t\t\t\t)\n\t\t\t\t\t",
+              "comment": "This rule helps us speed up the matching.",
+              "end": "(?!\\G)",
+              "patterns": [
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": "\\G(\\+\\+|\\-\\-)$",
+                          "name": "keyword.operator.increment-or-decrement.redscript"
+                        },
+                        {
+                          "match": "\\G(\\+|\\-)$",
+                          "name": "keyword.operator.arithmetic.unary.redscript"
+                        },
+                        {
+                          "match": "\\G!$",
+                          "name": "keyword.operator.logical.not.redscript"
+                        },
+                        {
+                          "match": "\\G~$",
+                          "name": "keyword.operator.bitwise.not.redscript"
+                        },
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.prefix.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Prefix unary operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t(?<=^|[\\s(\\[{,;:])\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t\t(?![\\s)\\]},;:]|\\z)\n\t\t\t\t\t\t\t"
+                },
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": "\\G(\\+\\+|\\-\\-)$",
+                          "name": "keyword.operator.increment-or-decrement.redscript"
+                        },
+                        {
+                          "match": "\\G!$",
+                          "name": "keyword.operator.increment-or-decrement.redscript"
+                        },
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.postfix.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Postfix unary operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t(?<!^|[\\s(\\[{,;:])\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t\t(?=[\\s)\\]},;:]|\\z)\n\t\t\t\t\t\t\t"
+                },
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": "\\G=$",
+                          "name": "keyword.operator.assignment.redscript"
+                        },
+                        {
+                          "match": "\\G(\\+|\\-|\\*|/|%|<<|>>|&|\\^|\\||&&|\\|\\|)=$",
+                          "name": "keyword.operator.assignment.compound.redscript"
+                        },
+                        {
+                          "match": "\\G(\\+|\\-|\\*|/)$",
+                          "name": "keyword.operator.arithmetic.redscript"
+                        },
+                        {
+                          "match": "\\G&(\\+|\\-|\\*)$",
+                          "name": "keyword.operator.arithmetic.overflow.redscript"
+                        },
+                        {
+                          "match": "\\G%$",
+                          "name": "keyword.operator.arithmetic.remainder.redscript"
+                        },
+                        {
+                          "match": "\\G(==|!=|>|<|>=|<=|~=)$",
+                          "name": "keyword.operator.comparison.redscript"
+                        },
+                        {
+                          "match": "\\G\\?\\?$",
+                          "name": "keyword.operator.coalescing.redscript"
+                        },
+                        {
+                          "match": "\\G(&&|\\|\\|)$",
+                          "name": "keyword.operator.logical.redscript"
+                        },
+                        {
+                          "match": "\\G(&|\\||\\^|<<|>>)$",
+                          "name": "keyword.operator.bitwise.redscript"
+                        },
+                        {
+                          "match": "\\G(===|!==)$",
+                          "name": "keyword.operator.bitwise.redscript"
+                        },
+                        {
+                          "match": "\\G\\?$",
+                          "name": "keyword.operator.ternary.redscript"
+                        },
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.infix.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Infix operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t[/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t"
+                },
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.prefix.dot.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Dot prefix unary operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t(?<=^|[\\s(\\[{,;:])\n\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t\t  | [/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t\t(?![\\s)\\]},;:]|\\z)\n\t\t\t\t\t\t\t"
+                },
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.postfix.dot.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Dot postfix unary operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t(?<!^|[\\s(\\[{,;:])\n\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t\t  | [/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t\t(?=[\\s)\\]},;:]|\\z)\n\t\t\t\t\t\t\t"
+                },
+                {
+                  "captures": {
+                    "0": {
+                      "patterns": [
+                        {
+                          "match": "\\G\\.\\.[.<]$",
+                          "name": "keyword.operator.range.redscript"
+                        },
+                        {
+                          "match": ".+",
+                          "name": "keyword.operator.custom.infix.dot.redscript"
+                        }
+                      ]
+                    }
+                  },
+                  "comment": "Dot infix operator",
+                  "match": "(?x)\n\t\t\t\t\t\t\t\t\\G\t\t\t\t\t\t\t\t\t\t# Matching from the beginning ensures\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t# that we start with operator-head\n\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t(?!(//|/\\*|\\*/))\n\t\t\t\t\t\t\t\t\t(\n\t\t\t\t\t\t\t\t\t\t\\.\t\t\t\t\t\t\t\t# dot\n\t\t\t\t\t\t\t\t\t  | [/=\\-+!*%<>&|^~?]\t\t\t\t# operator-head\n\t\t\t\t\t\t\t\t\t  | [\\x{00A1}-\\x{00A7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00A9}\\x{00AB}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00AC}\\x{00AE}]\n\t\t\t\t\t\t\t\t\t  | [\\x{00B0}-\\x{00B1}\\x{00B6}\\x{00BB}\\x{00BF}\\x{00D7}\\x{00F7}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2016}-\\x{2017}\\x{2020}-\\x{2027}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2030}-\\x{203E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2041}-\\x{2053}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2055}-\\x{205E}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2190}-\\x{23FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2500}-\\x{2775}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2794}-\\x{2BFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{2E00}-\\x{2E7F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3001}-\\x{3003}]\n\t\t\t\t\t\t\t\t\t  | [\\x{3008}-\\x{3030}]\n\t\t\t\t\t\t\t\t  \n\t\t\t\t\t\t\t\t\t  | [\\x{0300}-\\x{036F}]\t\t\t\t# operator-character\n\t\t\t\t\t\t\t\t\t  | [\\x{1DC0}-\\x{1DFF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{20D0}-\\x{20FF}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE00}-\\x{FE0F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{FE20}-\\x{FE2F}]\n\t\t\t\t\t\t\t\t\t  | [\\x{E0100}-\\x{E01EF}]\n\t\t\t\t\t\t\t\t\t)\n\t\t\t\t\t\t\t\t)++\n\t\t\t\t\t\t\t"
+                }
+              ]
+            },
+            {
+              "match": ":",
+              "name": "keyword.operator.ternary.redscript"
+            }
+          ]
+        },
+        "root": {
+          "patterns": [
+            {
+              "include": "#compiler-control"
+            },
+            {
+              "include": "#declarations"
+            },
+            {
+              "include": "#expressions"
+            }
+          ]
+        }
+      }
+    }

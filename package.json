@@ -1,0 +1,25 @@
+{
+    "name": "redscript-syntax-highlighting",
+    "displayName": "redscript-syntax-highlighting",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.62.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "redscript",
+            "aliases": ["Redscript", "redscript"],
+            "extensions": [".reds"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "redscript",
+            "scopeName": "source.redscript",
+            "path": "./syntaxes/redscript.tmLanguage.json"
+        }]
+    }
+}
