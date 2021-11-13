@@ -1,13 +1,9 @@
 {
   "information_for_contributors": [
-    "This file has been converted from https://github.com/textmate/redscript.tmbundle/blob/master/Syntaxes/Swift.tmLanguage",
-    "If you want to provide a fix or improvement, please create a pull request against the original repository.",
-    "Once accepted there, we are happy to receive an update request."
+    "This file is based on https://github.com/microsoft/vscode/blob/main/extensions/swift/syntaxes/swift.tmLanguage.json"
   ],
-  "version": "https://github.com/textmate/swift.tmbundle/commit/8c7672d74c1baa4e6944a05ac6c57a623532f18b",
   "name": "Redscript",
   "scopeName": "source.redscript",
-  "comment": "See redscript.tmbundle/grammar-test.redscript for test cases.",
   "patterns": [
     {
       "include": "#root"

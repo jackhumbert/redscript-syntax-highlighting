@@ -1,11 +1,24 @@
 {
     "name": "redscript-syntax-highlighting",
-    "displayName": "redscript-syntax-highlighting",
-    "description": "Syntax Highlighting for Redscript",
-    "repository": "https://github.com/jackhumbert/redscript-syntax-highlighting",
-    "version": "0.0.1",
+    "displayName": "Redscript Syntax Highlighting",
+    "description": "Syntax Highlighting for Redscript, used in writing scripts for Cyberpunk 2077.",
+    "repository": {
+        "url": "https://github.com/jackhumbert/redscript-syntax-highlighting",
+        "type": "git"
+    },
+    "bugs": {
+        "url": "https://github.com/jackhumbert/redscript-syntax-highlighting/issues"
+    },
+    "license": "MIT",
+    "homepage": "https://wiki.redmodding.org/redscript/",
+    "version": "0.0.2",
     "engines": {
         "vscode": "^1.61.0"
+    },
+    "icon": "https://github.com/jackhumbert/redscript-syntax-highlighting/raw/master/images/icon.png",
+    "galleryBanner": {
+      "color": "#DF2935",
+      "theme": "dark"
     },
     "categories": [
         "Programming Languages"
