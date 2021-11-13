@@ -15,7 +15,7 @@
     "engines": {
         "vscode": "^1.61.0"
     },
-    "icon": "https://github.com/jackhumbert/redscript-syntax-highlighting/raw/master/images/icon.png",
+    "icon": "images/icon.png",
     "galleryBanner": {
       "color": "#DF2935",
       "theme": "dark"
