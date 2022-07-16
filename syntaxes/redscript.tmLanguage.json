@@ -51,7 +51,7 @@
       "patterns": [
         {
           "name": "meta.attribute.redscript",
-          "begin": "((@)(?:(?:wrap|add|replace)Method|replaceGlobal|addField))(\\()",
+          "begin": "((@)(?:(?:wrap|add|replace)Method|replaceGlobal|addField|runtimeProperty))(\\()",
           "beginCaptures": {
             "1": {
               "name": "storage.modifier.attribute.redscript"
@@ -73,6 +73,9 @@
             {
               "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
               "name": "entity.name.class.redscript"
+            }, 
+            {
+              "include": "#string"
             }
           ]
         }
@@ -91,8 +94,36 @@
       "patterns": [
         {
           "comment": "Global functions available in Redscript",
-          "match": "\\b(Cast|Equals|NotEquals|IsDefined|To(String|Variant)|EnumInt|IntEnum|Array(Size|Resize|Push|Pop|Clear|Find(First|Last)|Contains|Count|Insert|Remove|Grow|Erase|Last))(?=\\s*\\()",
+          "match": "\\b(Equals|NotEquals|IsDefined|To(String|Variant)|EnumInt|IntEnum|Array(Size|Resize|Push|Pop|Clear|Find(First|Last)|Contains|Count|Insert|Remove|Grow|Erase|Last))(?=\\s*\\()",
           "name": "support.function.redscript"
+        }
+      ]
+    },
+    "global-cast-functions": {
+      "patterns": [
+        {
+          "name": "support.function.redscript",
+          "begin": "\\bCast(\\<)",
+          "beginCaptures": {
+            "0": {
+              "name": "support.function.redscript"
+            },
+            "1": {
+              "name": "punctuation.definition.arguments.begin.redscript"
+            }
+          },
+          "end": "(?!\\G)\\>",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.arguments.end.redscript"
+            }
+          },
+          "patterns": [
+            {
+              "match": "((?<q>`?)[\\p{L}_][\\p{L}_\\p{N}\\p{M}]*(\\k<q>))",
+              "name": "entity.name.class.redscript"
+            }
+          ]
         }
       ]
     },
@@ -2026,6 +2057,9 @@
         },
         {
           "include": "#builtin-global-functions"
+        },
+        {
+          "include": "#global-cast-functions"
         },
         {
           "include": "#builtin-properties"
